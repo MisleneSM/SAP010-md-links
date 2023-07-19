@@ -8,5 +8,13 @@
     "createdAt": "2023-06-19T12:25:44.680Z",
     "version": "6.3.0",
     "commit": "c17498042fc79734cec390e6314cbe810e95bf4c"
+  },
+  "devDependencies": {
+    "jest": "^29.6.1",
+    "nodemon": "^3.0.1"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "start": "nodemon"
   }
 }
