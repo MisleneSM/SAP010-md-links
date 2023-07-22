@@ -1,8 +1,25 @@
 {
   "env": {
-    "node": true
+    "node": true,
+    "es6": true,
+    "jest/globals": true
   },
+  "plugins": ["jest"], //padronização de test jest
   "parserOptions": {
     "ecmaVersion": 8
+  },
+  "globals": {
+    "path": "readonly", //palavra que não seja reatribuida em variaveis ou modificada
+    "fs": "readonly",
+    "chalc": "readonly"
+  },
+  "extends": [
+    "airbnb-base"
+  ],
+  "rules": {
+    "no-unused-vars": "warn", //variaveis declaradas porém não utilizadas
+    "no-undef": "error", // variaveis não declaradas
+    "no-use-before-define": "error", // uso de funções e variaveis antes de serem definidas
+    "camelcase": "warn" // nomenclatura de variaveis (testeNome <-- seguir padrão)
   }
 }
