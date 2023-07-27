@@ -1,10 +1,23 @@
-const mdLinks = require('../');
+const fs = require('fs');
+const path = require('path');
 
+const {readFilesInDirectory} = require('../src/index');
 
-describe('mdLinks', () => {
+jest.mock('fs', () => {
+  return {
+    promises: {
+      stat: jest.fn((filePath) => { // Simulando um objeto de estatísticas do arquivo/diretório
+        const stats = {
+          isDirectory: () => true, // Simulando que é um diretório (ou false para arquivo)
+        };
+        return Promise.resolve(stats);
+      }),
+    },
+  }
+})
 
-  it('should...', () => {
-    console.log('FIX ME!');
-  });
-
+describe('readFilesInDirectory', () => {
+  test('readFilesInDirectory é uma função', () => {
+    expect(typeof readFilesInDirectory).toBe('function')
+  })
 });
