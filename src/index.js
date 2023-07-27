@@ -1,58 +1,57 @@
 const fs = require('fs'); //operações de arquivo
 const path = require('path'); // caminhos
 
+// função para ler o conteudo de um diretorio / filtrar os arquivos 
+function readFilesInDirectory(dirPath) {
+    return fs.promises.readdir(dirPath)
+        .then(filesMD => {
+            const promisesFilesMD = filesMD
+                .filter(file => path.extname(file) === '.md') // cria um novo array contendo os arquivos que possui extensão md
+                .map(file => readFileAndDirectory(path.resolve(dirPath, file))); // percorre cada elemento do array
 
-function mdLinks(filePath, options = { validate: true }) {
-    // função para ler o conteudo de um diretorio / filtrar os arquivos 
-    function readFilesInDirectory(dirPath) {
-        return fs.promises.readdir(dirPath)
-            .then(filesMD => {
-                const promisesFilesMD = filesMD
-                    .filter(file => path.extname(file) === '.md')
-                    .map(file => readFileAndDirectory(path.resolve(dirPath, file)));
+            return Promise.all(promisesFilesMD);
+        })
+        .catch((error) => {
+            throw new Error('Error' + error.message);
+        });
+}
 
-                return Promise.all(promisesFilesMD);
-            })
-            .catch((error) => {
-                throw new Error('Error' + error.message);
-            });
+// lê o arquivo
+function readMarkdownFile(file) {
+    const mdFile = path.extname(file) === '.md';
+    if (!mdFile) {
+        return Promise.reject(new Error('ERROR'))
     }
 
-    // lê o arquivo
-    function readMarkdownFile(file) {
-        const mdFile = path.extname(file) === '.md';
-        if (!mdFile) {
-            return Promise.reject(new Error('ERROR'))
-        }
+    return fs.promises.readFile(file, 'utf8')
+        .then(data => {
+            return { file: file, data: data.toString() };
+        })
+        .catch((error) => {
+            throw new Error('Error' + error.message);
+        });
+}
 
-        return fs.promises.readFile(file, 'utf8')
-            .then(data => {
-                return { file: file, data: data.toString() };
-            })
-            .catch((error) => {
-                throw new Error('Error' + error.message);
-            });
-    }
+ // função ler e processar o caminho do diretório ou arquivo
+ function readFileAndDirectory(filePath) {
+    return fs.promises.stat(filePath)
+        .then(objectStatistics => {
+            if (objectStatistics.isDirectory()) {
+                return readFilesInDirectory(filePath);
+            } else {
+                return readMarkdownFile(filePath)
+                    .then(dataFile => {
+                        if (!dataFile.data.trim()) {
+                            return { file: filePath, data: 'Arquivo vazio' };
+                        } else {
+                            return dataFile;
+                        }
+                    });
+            }
+        });
+}
 
-    // função ler e processar o caminho do diretório ou arquivo
-    function readFileAndDirectory(filePath) {
-        return fs.promises.stat(filePath)
-            .then(objectStatistics => {
-                if (objectStatistics.isDirectory()) {
-                    return readFilesInDirectory(filePath);
-                } else {
-                    return readMarkdownFile(filePath)
-                        .then(dataFile => {
-                            if (!dataFile.data.trim()) {
-                                return { file: filePath, data: 'Arquivo vazio' };
-                            } else {
-                                return dataFile;
-                            }
-                        });
-                }
-            });
-    }
-
+function mdLinks(filePath, options = { validate: false }) {
     // função extrair links markdown
     function extractLinks(content, filePath) {
         const linkRegex = /\[([^\]]+)\]\(([^\)]+)\)/g;
@@ -107,6 +106,14 @@ function mdLinks(filePath, options = { validate: true }) {
                 });
         });
 }
+
+module.exports = {
+    readFilesInDirectory,
+    readMarkdownFile,
+    readFileAndDirectory,
+    mdLinks
+};
+
 
 mdLinks('./src')
     .then((result) => {
