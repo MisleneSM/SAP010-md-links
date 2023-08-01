@@ -1,6 +1,9 @@
 {
   "name": "md-links",
   "version": "0.1.0",
+  "bin": {
+    "md-links": "./src/cli.js"
+  },
   "engines": {
     "node": ">=16.x"
   },
