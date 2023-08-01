@@ -89,19 +89,27 @@ function mdLinks(filePath, options = { validate: true }) {
     // retorna a função validate se obter um validate true ou false
     return readFileAndDirectory(filePath)
         .then(resolve => {
-            const dataArray = Array.isArray(resolve) ? resolve: [resolve];
-            const promisesLinks = dataArray.flatMap(fileTopics => {
+            const dataArray = Array.isArray(resolve) ? resolve: [resolve]; // verifica se é um array, caso seja é atribuido a variavel dataArray, caso contrario, é criado um array com o valor de resolve
+            const promisesLinks = dataArray.flatMap(fileTopics => { // flatMap transforma um array em outro array
                 const linksObj = extractLinks(fileTopics.data, fileTopics.file);
                 return options.validate ? validateLinks(linksObj) : linksObj;
             });
 
             return Promise.all(promisesLinks)
                 .then(linksArrays => {
-                    const fullLinks = linksArrays.flat();
-                    return fullLinks;
+                    const fullLinks = linksArrays.flat(); // flat junta em um unico array com todos os links extraidos e validados
+                    
+                    if(options.stats){
+                        const stats = getStats(fullLinks);
+                        return stats;
+                    }else {
+                        return fullLinks;
+                    }
                 });
         });
 }
+
+
 
 module.exports = {
     readFilesInDirectory,
@@ -119,4 +127,4 @@ module.exports = {
     })
     .catch((error) => {
         console.error(error);
-    });*/
+    })*/

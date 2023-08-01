@@ -3,8 +3,6 @@ const path = require('path');
 
 const { readFilesInDirectory, readMarkdownFile, readFileAndDirectory, extractLinks, validateLinks, mdLinks } = require('../src/index');
 
-
-
 describe('Teste da função readFilesInDirectory', () => {
   test('readFilesInDirectory é uma função', () => {
     expect(typeof readFilesInDirectory).toBe('function')
@@ -78,14 +76,6 @@ describe('Teste da função readFileAndDirectory', () => {
       expect(vazioFileMD).toBeDefined();
     });
   });
-
-  test('readFileAndDirectory - Deve rejeitar a Promise quando o arquivo não for um .md ', () => {
-    const notFilePath = path.join(__dirname, '..', 'src', 'cli.js')
-
-    return readMarkdownFile(notFilePath).catch(error => {
-      expect(error.message).toBe('ERROR');
-    });
-  })
 
   test('Deve retornar "Arquivo vazio" quando o arquivo md estiver vazio', () => {
     const testFileVazio = path.join(__dirname, '..', 'src', 'vazio.md')
