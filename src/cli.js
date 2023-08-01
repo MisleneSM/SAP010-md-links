@@ -1,5 +1,13 @@
+#!/usr/bin/env node
 const { mdLinks } = require('./index');
-const path = require('path');
+
+const filePath = process.argv[2];
+const options = {
+    validate: process.argv.includes('--validate'),
+    stats: process.argv.includes('--stats'),
+    validadeAndStats: process.argv.includes('--validate') && process.argv.includes('--stats'),
+};
+
 
 // Função para obter as estatísticas dos links
 function getStats(links) {
@@ -15,56 +23,51 @@ function getStats(links) {
 }
 
 function printLinks(links) {
-    links.forEach(link => {
-        console.log(`File: ${link.file}`);
-        console.log(`Text: ${link.text}`);
-        console.log(`Link: ${link.href}`);
-        console.log(`"""""""""""""""""""""""""""`)
+    links.forEach((link) => {
+        const {href, text, file, status} = link;
+        const statusLink = status === 200 ? `ok ${status}` : `fail ${status}`;
+        console.log(`File: ${file}`);
+        console.log(`Text: ${text}`);
+        console.log(`Link: ${href}`);
+        console.log(`Status: ${statusLink}`);
+        console.log(`"""""""""""""""""""""""""""""""""""""`)
     });
 }
 
 function printStats(stats) {
     console.log(`Total: ${stats.total}`);
     console.log(`Unique: ${stats.unique}`);
-    console.log(`Broken: ${stats.broken}`);
 }
 
-
-const filePath = process.argv[2];
-const options = {
-    validate: process.argv.includes('--validate'),
-    stats: process.argv.includes('--stats'),
-    validadeAndStats: process.argv.includes('--validate') && process.argv.includes('--stats'),
-};
+function printStatsBroken(stats) {
+    console.log(`Total: ${stats.total}`);
+    console.log(`Unique: ${stats.unique}`);
+    console.log(`Broken: ${stats.broken}`);
+}
 
 function mdLinksCli(path, options) {
     mdLinks(path, options)
         .then((result) => {
-            if (options.validate) {
-                printLinks(result);
+            if(result.length === 0){
+                console.log('O arquivo não contém links');
+                return;
+            }
 
+            if (options.validadeAndStats) {
+                const linkStats = getStats(result);
+                printStatsBroken(linkStats);
+            } else if (options.validate) {
+                printLinks(result);
             } else if (options.stats) {
                 const stats = getStats(result);
                 printStats(stats);
-
-            } else if (options.validadeAndStats) {
-                const linkStats = getStats(result);
-                printStats(linkStats)
             } else {
                 printLinks(result);
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error(error);
-        })
+        });
 }
 
-//mdLinksCli(path, options);
-
-/*mdLinksCli('./src')
-    .then((result) => {
-        console.log(result);
-    })
-    .catch((error) => {
-        console.error(error);
-    })*/
+mdLinksCli(filePath, options);

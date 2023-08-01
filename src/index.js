@@ -98,13 +98,7 @@ function mdLinks(filePath, options = { validate: true }) {
             return Promise.all(promisesLinks)
                 .then(linksArrays => {
                     const fullLinks = linksArrays.flat(); // flat junta em um unico array com todos os links extraidos e validados
-                    
-                    if(options.stats){
-                        const stats = getStats(fullLinks);
-                        return stats;
-                    }else {
-                        return fullLinks;
-                    }
+                    return fullLinks;
                 });
         });
 }
