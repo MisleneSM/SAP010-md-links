@@ -22,6 +22,7 @@ function getStats(links) {
     };
 }
 
+// função validate
 function printLinks(links) {
     links.forEach((link) => {
         const {href, text, file, status} = link;
@@ -34,11 +35,13 @@ function printLinks(links) {
     });
 }
 
+// função stats
 function printStats(stats) {
     console.log(`Total: ${stats.total}`);
     console.log(`Unique: ${stats.unique}`);
 }
 
+// função validate and stats
 function printStatsBroken(stats) {
     console.log(`Total: ${stats.total}`);
     console.log(`Unique: ${stats.unique}`);

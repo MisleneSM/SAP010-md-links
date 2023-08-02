@@ -173,14 +173,14 @@ describe('Teste da função mdLinks', () => {
   })
 
   test('Deve retornar os links com validação', () => {
-    return mdLinks('src/testing.md', {validate: true})
-    .then((result) => {
-      expect (result).toEqual ([
-        {href: 'https://nodejs.org/api/path.html', text: 'Path - Documentação oficial (em inglês)', file: 'src/testing.md', status: 200, ok: 'ok'},
-        {href: 'https://nodejs.org/api/fs.html', text: 'File system - Documentação oficial (em inglês)', file: 'src/testing.md', status: 200, ok: 'ok'},
-        {href: 'https:/googlecom', text: 'Google', file: 'src/testing.md', status: 400, ok: 'fail'},
-      ]);
-    });
+    return mdLinks('src/testing.md', { validate: true })
+      .then((result) => {
+        expect(result).toEqual([
+          { href: 'https://nodejs.org/api/path.html', text: 'Path - Documentação oficial (em inglês)', file: 'src/testing.md', status: 200, ok: 'ok' },
+          { href: 'https://nodejs.org/api/fs.html', text: 'File system - Documentação oficial (em inglês)', file: 'src/testing.md', status: 200, ok: 'ok' },
+          { href: 'https:/googlecom', text: 'Google', file: 'src/testing.md', status: 400, ok: 'fail' },
+        ]);
+      });
   });
 
   test('deve retornar os links sem validação', () => {
