@@ -24,10 +24,6 @@ describe('Teste da função readFilesInDirectory', () => {
 });
 
 describe('Teste da função readMarkdownFile', () => {
-  test('readMarkdownFile é uma função', () => {
-    expect(typeof readMarkdownFile).toBe('function')
-  })
-
   test('readMarkdownFile - deve ler o conteúdo de um arquivo MD', () => {
     const fileTestPath = path.join(__dirname, '..', 'src', 'testing.md');
 
@@ -49,10 +45,6 @@ describe('Teste da função readMarkdownFile', () => {
 });
 
 describe('Teste da função readFileAndDirectory', () => {
-  test('readFileAndDirectory é uma função', () => {
-    expect(typeof readFileAndDirectory).toBe('function')
-  })
-
   test('readFileAndDirectory - Deve ler o conteúdo de um arquivo Markdown e retornar um objeto com as informações', () => {
     const testFilePath = path.join(__dirname, '..', 'src', 'testing.md')
 
@@ -87,10 +79,6 @@ describe('Teste da função readFileAndDirectory', () => {
 });
 
 describe('Teste da função extractLinks', () => {
-  test('extractLinks é uma função', () => {
-    expect(typeof extractLinks).toBe('function')
-  });
-
   test('extractLinks - Deve extrair os links de um arquivo Markdown', () => {
     const contentMD = {
       data: `Arquivo MD com links:
@@ -117,62 +105,145 @@ describe('Teste da função extractLinks', () => {
     };
 
     const filePath = './src/vazio.md';
-
     const result = extractLinks(contentVazio, filePath);
-
     expect(result).toEqual([]);
   })
 });
 
 
 describe('Teste da função validateLinks', () => {
-  test('validateLinks é uma função', () => {
-    expect(typeof validateLinks).toBe('function')
-  });
-
   test('Deve retornar a validação dos links com sucesso', () => {
-
-    // Função simulada para realizar a requisição HTTP
-    function fetchMock(href) {
-
-      //Simula a resposta do servidor para as requisições
-      const responses = {
-        'https://nodejs.org/api/path.html': { status: 200, ok: true },
-        'https://nodejs.org/api/fs.html': { status: 200, ok: true },
-        'https://www.googlecom': { status: 400, ok: false },
-      };
-
-      return new Promise((resolve) => {
-        resolve(responses[href]);
-      });
-    }
-
-    const links = [
-      { href: 'https://nodejs.org/api/path.html', text: 'Path', file: './src/testing.md' },
-      { href: 'https://nodejs.org/api/fs.html', text: 'File system', file: './src/testing.md' },
-      { href: 'https://www.googlecom', text: 'Google', file: './src/testing.md' },
+    const responsesLinks = [
+      {
+        href: 'https://nodejs.org/api/path.html',
+        text: "Path - Documentação oficial (em inglês)",
+        file: "./src/testing.md",
+      },
+      {
+        href: 'https://nodejs.org/api/fs.html',
+        text: "File system - Documentação oficial (em inglês)",
+        file: "./src/testing.md",
+      },
+      {
+        href: 'https:/googlecom',
+        text: "Google",
+        file: "./src/testing.md",
+      },
     ];
 
-    return validateLinks(links, fetchMock)
-      .then((result) => {
-        expect(Array.isArray(result)).toBe(true);
-        expect(result.length).toBe(3);
+    const mockFetch = jest.fn().mockImplementation((href) => {
+      if (href === 'https:/googlecom') {
+        return Promise.resolve({ status: 400, ok: false });
+      } else {
+        return Promise.resolve({ status: 200, ok: true });
+      }
+    });
 
-        // Verificar se a validação foi adicionada corretamente aos links
-        expect(result[0]).toEqual({ href: 'https://nodejs.org/api/path.html', text: 'Path', file: './src/testing.md', status: 200, ok: 'ok' });
-        expect(result[1]).toEqual({ href: 'https://nodejs.org/api/fs.html', text: 'File system', file: './src/testing.md', status: 200, ok: 'ok' });
-        expect(result[2]).toEqual({ href: 'https://www.googlecom', text: 'Google', file: './src/testing.md', status: 400, ok: 'fail' });
+    global.fetch = mockFetch;
+
+    return validateLinks(responsesLinks)
+      .then((result) => {
+        expect(result).toEqual([
+          {
+            href: 'https://nodejs.org/api/path.html',
+            text: 'Path - Documentação oficial (em inglês)',
+            file: './src/testing.md',
+            status: 200,
+            ok: 'ok',
+          },
+          {
+            href: 'https://nodejs.org/api/fs.html',
+            text: 'File system - Documentação oficial (em inglês)',
+            file: './src/testing.md',
+            status: 200,
+            ok: 'ok',
+          },
+          {
+            href: 'https:/googlecom',
+            text: 'Google',
+            file: './src/testing.md',
+            status: 400,
+            ok: 'fail',
+          },
+        ]);
       });
   });
+
+  test('Deve retornar status 400 quando ocorre erro sem response', () => {
+    const errorWithoutResponse = {
+      message: 'Algum erro sem resposta'
+    };
+    
+    const responsesLinks = [
+      {
+        href:'https://nodejs.org/api/path.html',
+        text: 'Path - Documentação oficial (em inglês)',
+        file: './src/testing.md',
+      },
+      {
+        href: 'https://nodejs.org/api/fs.html',
+        text: "File system - Documentação oficial (em inglês)",
+        file: "./src/testing.md",
+      },
+      {
+        href: 'https:/googlecom',
+        text: "Google",
+        file: "./src/testing.md",
+      },
+    ];
+
+    const mockFetch = jest.fn().mockRejectedValue(errorWithoutResponse);
+
+    global.fetch = mockFetch;
+
+    return validateLinks(responsesLinks)
+      .then((result) => {
+        expect(result).toEqual ([
+          {
+            href:'https://nodejs.org/api/path.html',
+            text: 'Path - Documentação oficial (em inglês)',
+            file: './src/testing.md',
+            status: 400,
+            ok: 'fail',
+          },
+          {
+            href: 'https://nodejs.org/api/fs.html',
+            text: "File system - Documentação oficial (em inglês)",
+            file: "./src/testing.md",
+            status: 400,
+            ok: 'fail',
+          },
+          {
+            href: 'https:/googlecom',
+            text: "Google",
+            file: "./src/testing.md",
+            status: 400,
+            ok: 'fail',
+          },
+        ]);
+      });
+  })
 });
 
-
 describe('Teste da função mdLinks', () => {
-  test('mdLinks é uma função', () => {
-    expect(typeof mdLinks).toBe('function')
-  })
-
   test('Deve retornar os links com validação', () => {
+    const fetchMockResponse = (status, ok) => {
+      return Promise.resolve({
+        status: status,
+        ok: ok,
+      });
+    };
+
+    global.fetch = jest.fn().mockImplementation((href) => {
+      if (href === 'https://nodejs.org/api/path.html') {
+        return fetchMockResponse(200, true);
+      } else if (href === 'https://nodejs.org/api/fs.html') {
+        return fetchMockResponse(200, true);
+      } else if (href === 'https:/googlecom') {
+        return fetchMockResponse(400, false);
+      }
+    });
+
     return mdLinks('src/testing.md', { validate: true })
       .then((result) => {
         expect(result).toEqual([
@@ -199,4 +270,3 @@ describe('Teste da função mdLinks', () => {
     });
   });
 });
-
