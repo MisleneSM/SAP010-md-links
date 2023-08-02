@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { mdLinks } = require('./index');
+const chalk = require('chalk');
 
 const filePath = process.argv[2];
 const options = {
@@ -22,34 +23,37 @@ function getStats(links) {
     };
 }
 
+// função validate
 function printLinks(links) {
     links.forEach((link) => {
         const {href, text, file, status} = link;
-        const statusLink = status === 200 ? `ok ${status}` : `fail ${status}`;
-        console.log(`File: ${file}`);
-        console.log(`Text: ${text}`);
-        console.log(`Link: ${href}`);
-        console.log(`Status: ${statusLink}`);
-        console.log(`"""""""""""""""""""""""""""""""""""""`)
+        const statusLink = status === 200 ? chalk.greenBright(`ok ${status}`) : chalk.redBright(`fail ${status}`);
+        console.log(chalk.magentaBright(`File: ${file}`));
+        console.log(chalk.cyanBright(`Text: ${text}`));
+        console.log(chalk.cyanBright(`Link: ${href}`));
+        console.log(chalk.whiteBright(`Status: ${statusLink}`));
+        console.log(`"""""""""""""""""""""""""""""""""""""`);
     });
 }
 
+// função stats
 function printStats(stats) {
-    console.log(`Total: ${stats.total}`);
-    console.log(`Unique: ${stats.unique}`);
+    console.log(chalk.magentaBright(`Total: ${stats.total}`));
+    console.log(chalk.cyanBright(`Unique: ${stats.unique}`));
 }
 
+// função validate and stats
 function printStatsBroken(stats) {
-    console.log(`Total: ${stats.total}`);
-    console.log(`Unique: ${stats.unique}`);
-    console.log(`Broken: ${stats.broken}`);
+    console.log(chalk.magentaBright(`Total: ${stats.total}`));
+    console.log(chalk.cyanBright(`Unique: ${stats.unique}`));
+    console.log(chalk.redBright(`Broken: ${stats.broken}`));
 }
 
 function mdLinksCli(path, options) {
     mdLinks(path, options)
         .then((result) => {
             if(result.length === 0){
-                console.log('O arquivo não contém links');
+                console.log(chalk.redBright('O arquivo não contém links'));
                 return;
             }
 

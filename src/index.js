@@ -113,12 +113,3 @@ module.exports = {
     validateLinks,
     mdLinks,
 };
-
-
-/*mdLinks('./src')
-    .then((result) => {
-        console.log(result);
-    })
-    .catch((error) => {
-        console.error(error);
-    })*/
