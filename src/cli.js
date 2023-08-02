@@ -53,7 +53,7 @@ function mdLinksCli(path, options) {
     mdLinks(path, options)
         .then((result) => {
             if(result.length === 0){
-                console.log('O arquivo não contém links');
+                console.log(chalk.redBright('O arquivo não contém links'));
                 return;
             }
 
