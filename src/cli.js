@@ -26,7 +26,7 @@ function getStats(links) {
 // função validate
 function printLinks(links) {
     links.forEach((link) => {
-        const {href, text, file, status} = link;
+        const { href, text, file, status } = link;
         const statusLink = status === 200 ? chalk.greenBright(`ok ${status}`) : chalk.redBright(`fail ${status}`);
         console.log(chalk.magentaBright(`File: ${file}`));
         console.log(chalk.cyanBright(`Text: ${text}`));
@@ -52,11 +52,11 @@ function printStatsBroken(stats) {
 function mdLinksCli(path, options) {
     mdLinks(path, options)
         .then((result) => {
-            if(result.length === 0){
+            if (result.length === 0) {
                 console.log(chalk.redBright('O arquivo não contém links'));
                 return;
             }
-
+            
             if (options.validadeAndStats) {
                 const linkStats = getStats(result);
                 printStatsBroken(linkStats);
@@ -66,7 +66,12 @@ function mdLinksCli(path, options) {
                 const stats = getStats(result);
                 printStats(stats);
             } else {
-                printLinks(result);
+                result.forEach((link) => {
+                    console.log(chalk.magentaBright(`File: ${link.file}`));
+                    console.log(chalk.cyanBright(`Text: ${link.text}`));
+                    console.log(chalk.cyanBright(`Link: ${link.href}`));
+                    console.log(`"""""""""""""""""""""""""""""""""""""`);
+                });
             }
         })
         .catch((error) => {
