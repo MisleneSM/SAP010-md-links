@@ -16,8 +16,7 @@
     "jest": "^29.6.1"
   },
   "scripts": {
-    "test": "jest --coverage",
-    "start:dev": "nodemon"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "chalk": "^4.1.2"
