@@ -23,7 +23,7 @@ informação que está ali.
 
 Neste projeto, foi desenvolvido uma biblioteca que lê arquivos Markdown('md') através de uma ferramenta de linha de comando (CLI), tendo como propósito a partir de um módulo do Node.js, fazer a leitura dos arquivos, verificar a existência dos links e suas estatísticas. Para uma melhor visualização das informações no terminal, foi feito também uma estilização no CLI utilizando a biblioteca chalk.
 
-***
+
 
 ## 2. Guia de instalação e uso🔍📝
 
