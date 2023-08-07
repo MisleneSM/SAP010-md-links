@@ -9,15 +9,15 @@ describe('Teste da função readFilesInDirectory', () => {
   })
 
   test('readFilesInDirectory - Ler conteudos de um diretório', () => {
-    const dirPath = path.join(__dirname, '..', 'src'); //Caminho para o diretório
+    const dirPath = path.join(__dirname, '..', 'src');
 
     return readFilesInDirectory(dirPath).then(result => {
-      expect(Array.isArray(result)).toBe(true); // Verifica se a função é um array
+      expect(Array.isArray(result)).toBe(true);
 
       const testingFileMD = result.find(file => file.file === path.join(dirPath, 'testing.md'));
       const vazioFileMD = result.find(file => file.file === path.join(dirPath, 'vazio.md'));
 
-      expect(testingFileMD).toBeDefined(); //Verifica se o arquivo 'testing.md' está presente no diretório
+      expect(testingFileMD).toBeDefined();
       expect(vazioFileMD).toBeDefined();
     });
   });
@@ -36,10 +36,10 @@ describe('Teste da função readMarkdownFile', () => {
   });
 
   test('readMarkdownFile - deve rejeitar a Promise quando o arquivo não for um MD', () => {
-    const notFilePath = path.join(__dirname, '..', 'src', 'cli.js') // não possui caminho md, termina com final js
+    const notFilePath = path.join(__dirname, '..', 'src', 'cli.js')
 
     return readMarkdownFile(notFilePath).catch(error => {
-      expect(error.message).toBe('ERROR'); // Verifica se o erro esperado foi gerado
+      expect(error.message).toBe('ERROR');
     });
   });
 });
@@ -64,7 +64,7 @@ describe('Teste da função readFileAndDirectory', () => {
       const testingFileMD = result.find(file => file.file === path.join(testDirPath, 'testing.md'));
       const vazioFileMD = result.find(file => file.file === path.join(testDirPath, 'vazio.md'));
 
-      expect(testingFileMD).toBeDefined(); //Verifica se o arquivo 'testing.md' está presente no diretório
+      expect(testingFileMD).toBeDefined();
       expect(vazioFileMD).toBeDefined();
     });
   });
@@ -133,7 +133,7 @@ describe('Teste da função validateLinks', () => {
 
     const mockFetch = jest.fn().mockImplementation((href) => {
       if (href === 'https:/googlecom') {
-        return Promise.resolve({ status: 400, ok: false });
+        return Promise.resolve({ status: 404, ok: false });
       } else {
         return Promise.resolve({ status: 200, ok: true });
       }
@@ -162,14 +162,14 @@ describe('Teste da função validateLinks', () => {
             href: 'https:/googlecom',
             text: 'Google',
             file: './src/testing.md',
-            status: 400,
+            status: 404,
             ok: 'fail',
           },
         ]);
       });
   });
 
-  test('Deve retornar status 400 quando ocorre erro sem response', () => {
+  test('Deve retornar status 404 quando ocorre erro sem response', () => {
     const errorWithoutResponse = {
       message: 'Algum erro sem resposta'
     };
@@ -203,21 +203,21 @@ describe('Teste da função validateLinks', () => {
             href:'https://nodejs.org/api/path.html',
             text: 'Path - Documentação oficial (em inglês)',
             file: './src/testing.md',
-            status: 400,
+            status: 404,
             ok: 'fail',
           },
           {
             href: 'https://nodejs.org/api/fs.html',
             text: "File system - Documentação oficial (em inglês)",
             file: "./src/testing.md",
-            status: 400,
+            status: 404,
             ok: 'fail',
           },
           {
             href: 'https:/googlecom',
             text: "Google",
             file: "./src/testing.md",
-            status: 400,
+            status: 404,
             ok: 'fail',
           },
         ]);
@@ -240,7 +240,7 @@ describe('Teste da função mdLinks', () => {
       } else if (href === 'https://nodejs.org/api/fs.html') {
         return fetchMockResponse(200, true);
       } else if (href === 'https:/googlecom') {
-        return fetchMockResponse(400, false);
+        return fetchMockResponse(404, false);
       }
     });
 
@@ -249,7 +249,7 @@ describe('Teste da função mdLinks', () => {
         expect(result).toEqual([
           { href: 'https://nodejs.org/api/path.html', text: 'Path - Documentação oficial (em inglês)', file: 'src/testing.md', status: 200, ok: 'ok' },
           { href: 'https://nodejs.org/api/fs.html', text: 'File system - Documentação oficial (em inglês)', file: 'src/testing.md', status: 200, ok: 'ok' },
-          { href: 'https:/googlecom', text: 'Google', file: 'src/testing.md', status: 400, ok: 'fail' },
+          { href: 'https:/googlecom', text: 'Google', file: 'src/testing.md', status: 404, ok: 'fail' },
         ]);
       });
   });
