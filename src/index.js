@@ -1,5 +1,5 @@
-const fs = require('fs'); //operações de arquivo
-const path = require('path'); // caminhos
+const fs = require('fs');
+const path = require('path');
 
 // função para ler o conteudo de um diretorio / filtrar os arquivos 
 function readFilesInDirectory(dirPath) {

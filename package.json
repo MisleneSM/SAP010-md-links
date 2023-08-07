@@ -1,9 +1,25 @@
 {
   "name": "md-links",
   "version": "0.1.0",
+  "description": "Biblioteca para ler e analisar arquivos no formato Markdown",
   "main": "./src/cli.js",
+  "author": {
+    "name": "Mislene Moura",
+    "email": "mislene.moura2000@gmail.com"
+  },
   "bin": {
     "md-links": "./src/cli.js"
+  },
+  "keywords": [
+    "node",
+    "API",
+    "CLI",
+    "markdown"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MisleneSM/SAP010-md-links.git"
   },
   "engines": {
     "node": ">=16.x"
