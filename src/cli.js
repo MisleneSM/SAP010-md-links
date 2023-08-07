@@ -49,6 +49,17 @@ function printStatsBroken(stats) {
     console.log(chalk.redBright(`Broken: ${stats.broken}`));
 }
 
+// função validate false
+function printLinksFalse(links) {
+    links.forEach((link) => {
+        const { href, text, file} = link;
+        console.log(chalk.magentaBright(`File: ${file}`));
+        console.log(chalk.cyanBright(`Text: ${text}`));
+        console.log(chalk.cyanBright(`Link: ${href}`));
+        console.log(`"""""""""""""""""""""""""""""""""""""`);
+    });
+}
+
 function mdLinksCli(path, options) {
     mdLinks(path, options)
         .then((result) => {
@@ -56,7 +67,6 @@ function mdLinksCli(path, options) {
                 console.log(chalk.redBright('O arquivo não contém links'));
                 return;
             }
-            
             if (options.validadeAndStats) {
                 const linkStats = getStats(result);
                 printStatsBroken(linkStats);
@@ -66,12 +76,7 @@ function mdLinksCli(path, options) {
                 const stats = getStats(result);
                 printStats(stats);
             } else {
-                result.forEach((link) => {
-                    console.log(chalk.magentaBright(`File: ${link.file}`));
-                    console.log(chalk.cyanBright(`Text: ${link.text}`));
-                    console.log(chalk.cyanBright(`Link: ${link.href}`));
-                    console.log(`"""""""""""""""""""""""""""""""""""""`);
-                });
+                printLinksFalse(result);
             }
         })
         .catch((error) => {
