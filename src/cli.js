@@ -10,7 +10,6 @@ const options = {
 };
 
 
-// Função para obter as estatísticas dos links
 function getStats(links) {
     const totalLinks = links.length;
     const uniqueLinks = new Set(links.map(link => link.href)).size;
@@ -23,8 +22,19 @@ function getStats(links) {
     };
 }
 
-// função validate
+
 function printLinks(links) {
+    links.forEach((link) => {
+        const { href, text, file} = link;
+        console.log(chalk.magentaBright(`File: ${file}`));
+        console.log(chalk.cyanBright(`Text: ${text}`));
+        console.log(chalk.cyanBright(`Link: ${href}`));
+        console.log(`"""""""""""""""""""""""""""""""""""""`);
+    });
+}
+
+
+function printLinksValidate(links) {
     links.forEach((link) => {
         const { href, text, file, status } = link;
         const statusLink = status === 200 ? chalk.greenBright(`ok ${status}`) : chalk.redBright(`fail ${status}`);
@@ -36,29 +46,19 @@ function printLinks(links) {
     });
 }
 
-// função stats
+
 function printStats(stats) {
     console.log(chalk.magentaBright(`Total: ${stats.total}`));
     console.log(chalk.cyanBright(`Unique: ${stats.unique}`));
 }
 
-// função validate and stats
+
 function printStatsBroken(stats) {
     console.log(chalk.magentaBright(`Total: ${stats.total}`));
     console.log(chalk.cyanBright(`Unique: ${stats.unique}`));
     console.log(chalk.redBright(`Broken: ${stats.broken}`));
 }
 
-// função validate false
-function printLinksFalse(links) {
-    links.forEach((link) => {
-        const { href, text, file} = link;
-        console.log(chalk.magentaBright(`File: ${file}`));
-        console.log(chalk.cyanBright(`Text: ${text}`));
-        console.log(chalk.cyanBright(`Link: ${href}`));
-        console.log(`"""""""""""""""""""""""""""""""""""""`);
-    });
-}
 
 function mdLinksCli(path, options) {
     mdLinks(path, options)
@@ -71,12 +71,12 @@ function mdLinksCli(path, options) {
                 const linkStats = getStats(result);
                 printStatsBroken(linkStats);
             } else if (options.validate) {
-                printLinks(result);
+                printLinksValidate(result);
             } else if (options.stats) {
                 const stats = getStats(result);
                 printStats(stats);
             } else {
-                printLinksFalse(result);
+                printLinks(result);
             }
         })
         .catch((error) => {

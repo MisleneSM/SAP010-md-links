@@ -1,19 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 
-// função para ler o conteudo de um diretorio / filtrar os arquivos 
+
 function readFilesInDirectory(dirPath) {
     return fs.promises.readdir(dirPath)
         .then(filesMD => {
             const promisesFilesMD = filesMD
-                .filter(file => path.extname(file) === '.md') // cria um novo array contendo os arquivos que possui extensão md
-                .map(file => readFileAndDirectory(path.resolve(dirPath, file))); // percorre cada elemento do array
+                .filter(file => path.extname(file) === '.md')
+                .map(file => readFileAndDirectory(path.resolve(dirPath, file)));
 
             return Promise.all(promisesFilesMD);
         })
 }
 
-// lê o arquivo
+
 function readMarkdownFile(file) {
     const mdFile = path.extname(file) === '.md';
     if (!mdFile) {
@@ -26,7 +26,7 @@ function readMarkdownFile(file) {
         })
 }
 
-// função ler e processar o caminho do diretório ou arquivo
+
 function readFileAndDirectory(filePath) {
     return fs.promises
         .stat(filePath)
@@ -46,7 +46,7 @@ function readFileAndDirectory(filePath) {
         })
 }
 
-// função extrair links markdown
+
 function extractLinks(content, filePath) {
     const linkRegex = /\[([^\]]+)\]\(([^\)]+)\)/g;
     const links = [];
@@ -62,7 +62,7 @@ function extractLinks(content, filePath) {
     return links;
 }
 
-// função validate
+
 function validateLinks(links) {
     const promisesLink = links.map((component) => {
         return fetch(component.href)
@@ -74,7 +74,7 @@ function validateLinks(links) {
                 }
             })
             .catch((error) => {
-                const status = error.response ? error.response.status : 400; //criado uma condição ficticia para que pudesse ser retornado o erro de status
+                const status = error.response ? error.response.status : 404;
                 return {
                     ...component,
                     status: status,
@@ -89,21 +89,19 @@ function mdLinks(filePath, options = { validate: true }) {
     // retorna a função validate se obter um validate true ou false
     return readFileAndDirectory(filePath)
         .then(resolve => {
-            const dataArray = Array.isArray(resolve) ? resolve: [resolve]; // verifica se é um array, caso seja é atribuido a variavel dataArray, caso contrario, é criado um array com o valor de resolve
-            const promisesLinks = dataArray.flatMap(fileTopics => { // flatMap transforma um array em outro array
+            const dataArray = Array.isArray(resolve) ? resolve: [resolve]; 
+            const promisesLinks = dataArray.flatMap(fileTopics => {
                 const linksObj = extractLinks(fileTopics.data, fileTopics.file);
                 return options.validate ? validateLinks(linksObj) : linksObj;
             });
 
             return Promise.all(promisesLinks)
                 .then(linksArrays => {
-                    const fullLinks = linksArrays.flat(); // flat junta em um unico array com todos os links extraidos e validados
+                    const fullLinks = linksArrays.flat();
                     return fullLinks;
                 });
         });
 }
-
-
 
 module.exports = {
     readFilesInDirectory,
