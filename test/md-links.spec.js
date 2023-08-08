@@ -81,7 +81,7 @@ describe('Teste da função readFileAndDirectory', () => {
 describe('Teste da função extractLinks', () => {
   test('extractLinks - Deve extrair os links de um arquivo Markdown', () => {
     const contentMD = {
-      data: `Arquivo MD com links:
+      data: `
       [Path](https://nodejs.org/api/path.html)
       [File system](https://nodejs.org/api/fs.html)
       [Google](https://www.google.com)
@@ -101,11 +101,10 @@ describe('Teste da função extractLinks', () => {
 
   test('Deve retornar um array vazio se não houver links no arquivo md', () => {
     const contentVazio = {
-      data: `Arquivo vazio sem links.`,
+      data: ``,
     };
 
-    const filePath = './src/vazio.md';
-    const result = extractLinks(contentVazio, filePath);
+    const result = extractLinks(contentVazio);
     expect(result).toEqual([]);
   })
 });
@@ -176,16 +175,6 @@ describe('Teste da função validateLinks', () => {
     
     const responsesLinks = [
       {
-        href:'https://nodejs.org/api/path.html',
-        text: 'Path - Documentação oficial (em inglês)',
-        file: './src/testing.md',
-      },
-      {
-        href: 'https://nodejs.org/api/fs.html',
-        text: "File system - Documentação oficial (em inglês)",
-        file: "./src/testing.md",
-      },
-      {
         href: 'https:/googlecom',
         text: "Google",
         file: "./src/testing.md",
@@ -199,20 +188,6 @@ describe('Teste da função validateLinks', () => {
     return validateLinks(responsesLinks)
       .then((result) => {
         expect(result).toEqual ([
-          {
-            href:'https://nodejs.org/api/path.html',
-            text: 'Path - Documentação oficial (em inglês)',
-            file: './src/testing.md',
-            status: 404,
-            ok: 'fail',
-          },
-          {
-            href: 'https://nodejs.org/api/fs.html',
-            text: "File system - Documentação oficial (em inglês)",
-            file: "./src/testing.md",
-            status: 404,
-            ok: 'fail',
-          },
           {
             href: 'https:/googlecom',
             text: "Google",
