@@ -89,7 +89,7 @@ function mdLinks(filePath, options = { validate: true }) {
     // retorna a função validate se obter um validate true ou false
     return readFileAndDirectory(filePath)
         .then(resolve => {
-            const dataArray = Array.isArray(resolve) ? resolve: [resolve]; 
+            const dataArray = Array.isArray(resolve) ? resolve: [resolve];
             const promisesLinks = dataArray.flatMap(fileTopics => {
                 const linksObj = extractLinks(fileTopics.data, fileTopics.file);
                 return options.validate ? validateLinks(linksObj) : linksObj;
