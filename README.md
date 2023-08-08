@@ -65,7 +65,7 @@ No seu terminal rode o comando md-links + o caminho do arquivo e será retornado
 
 Se deseja fazer a validação dos links desse arquivo, utilize a propriedade `--validate`, o mesmo fará uma requisição HTTP verificando se o link é funcional ou não. Se o link resultar em um redirecionamento a uma URL que responde ok, então consideremos o link como ok. Caso contrário, teremos um retorno de fail, conforme exemplo abaixo:
 
-![Alt text](./src/img/image-3.png)
+![Alt text](./src/img/image.png)
 
 
 #### `--stats`
