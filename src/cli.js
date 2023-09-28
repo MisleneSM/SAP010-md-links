@@ -6,10 +6,11 @@ const filePath = process.argv[2];
 const options = {
     validate: process.argv.includes('--validate'),
     stats: process.argv.includes('--stats'),
-    validadeAndStats: process.argv.includes('--validate') && process.argv.includes('--stats'),
+    //validadeAndStats: process.argv.includes('--validate') && process.argv.includes('--stats'),
 };
 
 
+// Função para obter as estatísticas dos links
 function getStats(links) {
     const totalLinks = links.length;
     const uniqueLinks = new Set(links.map(link => link.href)).size;
@@ -33,7 +34,7 @@ function printLinks(links) {
     });
 }
 
-
+// função validate
 function printLinksValidate(links) {
     links.forEach((link) => {
         const { href, text, file, status } = link;
@@ -46,19 +47,18 @@ function printLinksValidate(links) {
     });
 }
 
-
+// função stats
 function printStats(stats) {
     console.log(chalk.magentaBright(`Total: ${stats.total}`));
     console.log(chalk.cyanBright(`Unique: ${stats.unique}`));
 }
 
-
+// função validate and stats
 function printStatsBroken(stats) {
     console.log(chalk.magentaBright(`Total: ${stats.total}`));
     console.log(chalk.cyanBright(`Unique: ${stats.unique}`));
     console.log(chalk.redBright(`Broken: ${stats.broken}`));
 }
-
 
 function mdLinksCli(path, options) {
     mdLinks(path, options)
@@ -67,7 +67,7 @@ function mdLinksCli(path, options) {
                 console.log(chalk.redBright('O arquivo não contém links'));
                 return;
             }
-            if (options.validadeAndStats) {
+            if (options.validate && options.stats) {
                 const linkStats = getStats(result);
                 printStatsBroken(linkStats);
             } else if (options.validate) {

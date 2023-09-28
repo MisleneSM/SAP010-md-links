@@ -13,7 +13,7 @@ Desenvolvido por:
 * [2. Guia de instalação e uso](#2-guia-de-instalação-e-uso)
 * [3. Testes Unitários](#3-testes-unitários)
 * [4. Fluxograma](#4-fluxograma)
-* [5. Objetivos de Aprendizagem](#4-objetivos-de-aprendizagem)
+* [5. Objetivos de aprendizagem](#4-objetivos-de-aprendizagem)
 * [6. Tecnologias Utilizadas](#6-tecnologias-utilizadas)
 
 ***
@@ -83,14 +83,14 @@ Também podemos combinar as propriedades. Se deseja verificar a validação dos 
 ![Alt text](./src/img/image-5.png)
 
 
-## 3. Testes Unitários
+## 3. Testes Unitários✅
 
 Desenvolvido testes unitários abrangendo as funcionalidades do Node.js, garantindo mais segurança na usabilidade da biblioteca.
 
 ![Alt text](./src/img/image-9.png)
 
 
-## 4. Fluxograma🖊️
+## 4. Fluxograma📝
 
 Para melhor visualização do planejamento de tarefas e objetivos de cada etapa, foi realizada a organização do projeto por meio de um fluxograma, conforme imagem abaixo:
 
@@ -98,7 +98,7 @@ Para melhor visualização do planejamento de tarefas e objetivos de cada etapa,
 
 
 
-## 5. Objetivos de Aprendizagem✅
+## 5. Objetivos de aprendizagem✅
 
 * Java Script
 * Node.js
