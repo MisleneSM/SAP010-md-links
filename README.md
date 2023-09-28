@@ -13,7 +13,7 @@ Desenvolvido por:
 * [2. Guia de instalação e uso](#2-guia-de-instalação-e-uso)
 * [3. Testes Unitários](#3-testes-unitários)
 * [4. Fluxograma](#4-fluxograma)
-* [5. Objetivos de aprendizagem](#4-objetivos-de-aprendizagem)
+* [5. Objetivos de aprendizagem](#5-objetivos-de-aprendizagem)
 * [6. Tecnologias Utilizadas](#6-tecnologias-utilizadas)
 
 ***
