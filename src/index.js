@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-
+// função para ler o conteudo de um diretorio
 function readFilesInDirectory(dirPath) {
     return fs.promises.readdir(dirPath)
         .then(filesMD => {
@@ -13,7 +13,7 @@ function readFilesInDirectory(dirPath) {
         })
 }
 
-
+// lê o arquivo
 function readMarkdownFile(file) {
     const mdFile = path.extname(file) === '.md';
     if (!mdFile) {
@@ -26,7 +26,7 @@ function readMarkdownFile(file) {
         })
 }
 
-
+// função ler e processar o caminho do diretório ou arquivo
 function readFileAndDirectory(filePath) {
     return fs.promises
         .stat(filePath)
@@ -46,7 +46,7 @@ function readFileAndDirectory(filePath) {
         })
 }
 
-
+// função extrair links markdown
 function extractLinks(content, filePath) {
     const linkRegex = /\[([^\]]+)\]\(([^\)]+)\)/g;
     const links = [];
@@ -62,7 +62,7 @@ function extractLinks(content, filePath) {
     return links;
 }
 
-
+// função validate
 function validateLinks(links) {
     const promisesLink = links.map((component) => {
         return fetch(component.href)
@@ -74,7 +74,7 @@ function validateLinks(links) {
                 }
             })
             .catch((error) => {
-                const status = error.response ? error.response.status : 404;
+                const status = error.response ? error.response.status : 404; //criado uma condição ficticia para que pudesse ser retornado o erro de status
                 return {
                     ...component,
                     status: status,
@@ -86,7 +86,6 @@ function validateLinks(links) {
 }
 
 function mdLinks(filePath, options = { validate: true }) {
-    // retorna a função validate se obter um validate true ou false
     return readFileAndDirectory(filePath)
         .then(resolve => {
             const dataArray = Array.isArray(resolve) ? resolve: [resolve];
@@ -97,7 +96,7 @@ function mdLinks(filePath, options = { validate: true }) {
 
             return Promise.all(promisesLinks)
                 .then(linksArrays => {
-                    const fullLinks = linksArrays.flat();
+                    const fullLinks = linksArrays.flat(); // flat junta em um unico array
                     return fullLinks;
                 });
         });

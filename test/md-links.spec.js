@@ -14,7 +14,7 @@ describe('Teste da função readFilesInDirectory', () => {
     return readFilesInDirectory(dirPath).then(result => {
       expect(Array.isArray(result)).toBe(true);
 
-      const testingFileMD = result.find(file => file.file === path.join(dirPath, 'testing.md'));
+      const testingFileMD = result.find(file => file.file === path.join(dirPath, 'testing.md')); // find percorre cada elemento do array até encontrar o primeiro elemento que atende a condição
       const vazioFileMD = result.find(file => file.file === path.join(dirPath, 'vazio.md'));
 
       expect(testingFileMD).toBeDefined();
@@ -130,7 +130,7 @@ describe('Teste da função validateLinks', () => {
       },
     ];
 
-    const mockFetch = jest.fn().mockImplementation((href) => {
+    const mockFetch = jest.fn().mockImplementation((href) => { //mockImplementation substitui uma função por uma personalizada
       if (href === 'https:/googlecom') {
         return Promise.resolve({ status: 404, ok: false });
       } else {
