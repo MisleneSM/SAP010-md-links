@@ -2,7 +2,6 @@
 
 <div align="center">
 Desenvolvido por:
-
   Mislene Moura<br>
   <a href="https://www.linkedin.com/in/mislenemoura/">Linkedin</a> | <a href="https://github.com/MisleneSM">Github</a>
 </div>
